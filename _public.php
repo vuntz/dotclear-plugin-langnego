@@ -22,7 +22,7 @@ $core->addBehavior('publicPrepend',array('langNego','publicPrepend'));
 
 class langNego
 {
-        public static function publicPrepend(&$core)
+        public static function publicPrepend($core)
         {
 		$lang = self::get_language();
 
@@ -68,7 +68,10 @@ class langNego
 
 		/* Format of the HTTP header:
 		 * Accept-Language: fr; q=1.0, en; q=0.5 */
-		$http_languages = $_SERVER['HTTP_ACCEPT_LANGUAGE'];
+		$http_languages = "";
+		if (array_key_exists('HTTP_ACCEPT_LANGUAGE', $_SERVER)) {
+			$http_languages = $_SERVER['HTTP_ACCEPT_LANGUAGE'];
+		}
 
 		if ($http_languages == "") {
 			/* no preference set */
