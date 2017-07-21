@@ -1,4 +1,4 @@
-<?
+<?php
 # ***** BEGIN LICENSE BLOCK *****
 # Copyright (c) 2007 Vincent Untz
 #
