@@ -25,40 +25,33 @@ class langNego
 {
         public static function publicPrepend($core)
         {
+		$locale_dir = path::real(DC_ROOT . '/locales/');
+		if (!is_dir($locale_dir)) {
+			return;
+		}
+
 		$lang = self::get_language();
+		if ($core->lang == $lang) {
+			return;
+		}
+
+		l10n::lang($lang);
 
 		/* reset all translations, since we might need to go back to
 		 * english */
 		$GLOBALS['__l10n'] = array();
 		$GLOBALS['__l10n_files'] = array();
 
-		$start_pos = 0;
-		$locale_dir = '';
-		while (true) {
-			$pos = strpos(DC_PLUGINS_ROOT, '/inc/', $start_pos);
-			if ($pos === false) {
-				break;
-			}
-
-			$locale_dir = substr(DC_PLUGINS_ROOT, 0, $pos).'/locales/';
-			if (is_dir($locale_dir)) {
-				break;
-			}
-
-			$start_pos = $pos + 1;
-		}
-
-		if (!($pos === false)) {
-			l10n::set($locale_dir.$lang.'/main');
-			l10n::set($locale_dir.$lang.'/date');
-			l10n::set($locale_dir.$lang.'/public');
-		}
+		l10n::set($locale_dir.'/'.$lang.'/main');
+		l10n::set($locale_dir.'/'.$lang.'/date');
+		l10n::set($locale_dir.'/'.$lang.'/plugins');
+		l10n::set($locale_dir.'/'.$lang.'/public');
 
 		foreach ($core->plugins->getModules() as $id => $m) {
 			$core->plugins->loadModuleL10N($id,$lang,'main');
 		}
 
-		$core->themes->loadModuleL10N($core->blog->settings->theme,$lang,'main');
+		$core->themes->loadModuleL10N($core->blog->settings->system->theme,$lang,'main');
 	}
 
 	/* Based on: http://www-128.ibm.com/developerworks/web/library/wa-apac.html */
