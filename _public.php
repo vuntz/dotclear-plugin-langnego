@@ -19,11 +19,11 @@
 # ***** END LICENSE BLOCK *****
 if (!defined('DC_RC_PATH')) return;
 
-$core->addBehavior('publicPrepend',array('langNego','publicPrepend'));
+dcCore::app()->addBehavior('publicPrependV2',array('langNego','publicPrependV2'));
 
 class langNego
 {
-        public static function publicPrepend($core)
+        public static function publicPrependV2()
         {
 		$locale_dir = path::real(DC_ROOT . '/locales/');
 		if (!is_dir($locale_dir)) {
@@ -31,7 +31,7 @@ class langNego
 		}
 
 		$lang = self::get_language();
-		if ($core->lang == $lang) {
+		if (dcCore::app()->lang == $lang) {
 			return;
 		}
 
@@ -47,11 +47,11 @@ class langNego
 		l10n::set($locale_dir.'/'.$lang.'/plugins');
 		l10n::set($locale_dir.'/'.$lang.'/public');
 
-		foreach ($core->plugins->getModules() as $id => $m) {
-			$core->plugins->loadModuleL10N($id,$lang,'main');
+		foreach (dcCore::app()->plugins->getModules() as $id => $m) {
+			dcCore::app()->plugins->loadModuleL10N($id,$lang,'main');
 		}
 
-		$core->themes->loadModuleL10N($core->blog->settings->system->theme,$lang,'main');
+		dcCore::app()->themes->loadModuleL10N(dcCore::app()->blog->settings->system->theme,$lang,'main');
 	}
 
 	/* Based on: http://www-128.ibm.com/developerworks/web/library/wa-apac.html */
